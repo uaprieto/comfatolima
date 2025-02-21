@@ -25,7 +25,7 @@ if (isset($id) && isset($cmd)) {
 if (isset($_POST['registro'])) {
     $id = $_POST['id'];
     $nombre = $_POST['nombre'];
-    $correo = $_POST['email'];
+    $correo = $_POST['correo'];
     $clave = $_POST['clave'];
     if ($id == "") {
         $sql = "INSERT INTO usuarios (nombre, correo, clave) VALUES ('$nombre', '$correo', '$clave')";
@@ -43,107 +43,33 @@ if (isset($_POST['registro'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario y Tabla de Usuarios</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        .form-container,
-        .table-container {
-            margin-bottom: 20px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            max-width: 400px;
-        }
-
-        label {
-            margin-bottom: 5px;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            margin-bottom: 10px;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        input[type="submit"] {
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 12px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .crud-buttons {
-            display: flex;
-            gap: 5px;
-        }
-
-        .crud-buttons button {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .crud-buttons .update {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .crud-buttons .delete {
-            background-color: #f44336;
-            color: white;
-        }
-    </style>
+    <title>Recaudos UP</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
     <div class="form-container">
         <h2>Formulario de Usuario</h2>
-        <form action="index.php" method="post">
+        <form action="index.php" name="usuario" method="post">
+            <input type="hidden" name="id" value="<?php echo $data_form['id']; ?>">
             <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
+            <input type="text" id="nombre" name="nombre" required value="<?php echo $data_form['nombre']; ?>">
+            <br>
 
             <label for="correo">Correo:</label>
-            <input type="email" id="correo" name="correo" required>
+            <input type="email" id="correo" name="correo" required value="<?php echo $data_form['correo']; ?>">
+            <br>
 
             <label for="clave">Clave:</label>
-            <input type="password" id="clave" name="clave" required>
+            <input type="password" id="clave" name="clave" required value="<?php echo $data_form['clave']; ?>">
+            <br>
 
             <label for="activo">Activo:</label>
-            <input type="text" id="activo" name="activo" required>
-
-            <input type="submit" value="Enviar">
+            <input type="checkbox" id="activo" name="activo" value="1" <?php if ($data_form['activo'] == 1) {
+                                                                            echo "checked";
+                                                                        } ?>>
+            <br>
+            <button class="button" type="submit" name="registro" value="<?php echo $bnt_form; ?>"><?php echo $bnt_form; ?></button>
         </form>
     </div>
 
@@ -155,7 +81,6 @@ if (isset($_POST['registro'])) {
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Correo</th>
-                    <th>Clave</th>
                     <th>Activo</th>
                     <th>Acciones</th>
                 </tr>
@@ -173,24 +98,12 @@ if (isset($_POST['registro'])) {
                     echo "<td>" . $fila['id'] . "</td>";
                     echo "<td>" . $fila['nombre'] . "</td>";
                     echo "<td>" . $fila['correo'] . "</td>";
-                    echo "<td><a href='index.php?id=" . $fila['id'] . "&cmd=update' class='btn-update'><img src='img/update.png' width='20px' height='20px'></a>" .
-                        "<a href='index.php?id=" . $fila['id'] . "&cmd=delete' class='btn-delete'><img src='img/delete.png' width='20px' height='20px'></a></td>";
+                    echo "<td>" . $fila['activo'] . "</td>";
+                    echo "<td class='crud-buttons'><a href='index.php?id=" . $fila['id'] . "&cmd=update' class='update'><img src='img/update.png' width='20px' height='20px'></a>" .
+                        "<a href='index.php?id=" . $fila['id'] . "&cmd=delete' class='delete'><img src='img/delete.png' width='20px' height='20px'></a></td>";
                     echo "</tr>";
                 }
                 ?>
-
-                <tr>
-                    <td>1</td>
-                    <td>Juan Pérez</td>
-                    <td>juan@example.com</td>
-                    <td>******</td>
-                    <td>Sí</td>
-                    <td class="crud-buttons">
-                        <button class="update">Actualizar</button>
-                        <button class="delete">Eliminar</button>
-                    </td>
-                </tr>
-                <!-- Más filas de ejemplo -->
             </tbody>
         </table>
     </div>

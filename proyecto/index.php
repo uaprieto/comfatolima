@@ -27,12 +27,15 @@ if (isset($_POST['registro'])) {
     $nombre = $_POST['nombre'];
     $correo = $_POST['correo'];
     $clave = $_POST['clave'];
+    $activo = isset($_POST['activo']) ? 1 : 0;
     if ($id == "") {
-        $sql = "INSERT INTO usuarios (nombre, correo, clave) VALUES ('$nombre', '$correo', '$clave')";
+        $sql = "INSERT INTO usuarios (nombre, correo, clave, activo) VALUES ('$nombre', '$correo', '$clave', '$activo')";
     } else {
-        $sql = "UPDATE usuarios SET nombre = '$nombre', correo = '$correo', clave = '$clave' WHERE id = '$id'";
+        $sql = "UPDATE usuarios SET nombre = '$nombre', correo = '$correo', clave = '$clave', activo = '$activo' WHERE id = '$id'";
     }
+    print_r($sql);
     mysqli_query($conexion, $sql);
+    print_r(mysqli_error($conexion));
     header("Location: index.php");
 }
 
@@ -65,11 +68,13 @@ if (isset($_POST['registro'])) {
             <br>
 
             <label for="activo">Activo:</label>
-            <input type="checkbox" id="activo" name="activo" value="1" <?php if ($data_form['activo'] == 1) {
-                                                                            echo "checked";
-                                                                        } ?>>
+            <input type="checkbox" id="activo" name="activo" value="1"
+                <?php if ($data_form['activo'] == 1) {
+                    echo "checked";
+                } ?>>
             <br>
-            <button class="button" type="submit" name="registro" value="<?php echo $bnt_form; ?>"><?php echo $bnt_form; ?></button>
+            <button class="button" type="submit" name="registro">
+                <?php echo $bnt_form; ?></button>
         </form>
     </div>
 
@@ -82,6 +87,7 @@ if (isset($_POST['registro'])) {
                     <th>Nombre</th>
                     <th>Correo</th>
                     <th>Activo</th>
+                    <th>Fecha creado</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -92,15 +98,15 @@ if (isset($_POST['registro'])) {
                 $resultado = mysqli_query($conexion, $sql);
 
                 while ($fila = mysqli_fetch_array($resultado)) {
-                    print_r($fila);
                     //$usuario = Usuario::crearDesdeFila($fila);
                     echo "<tr>";
                     echo "<td>" . $fila['id'] . "</td>";
                     echo "<td>" . $fila['nombre'] . "</td>";
                     echo "<td>" . $fila['correo'] . "</td>";
-                    echo "<td>" . $fila['activo'] . "</td>";
-                    echo "<td class='crud-buttons'><a href='index.php?id=" . $fila['id'] . "&cmd=update' class='update'><img src='img/update.png' width='20px' height='20px'></a>" .
-                        "<a href='index.php?id=" . $fila['id'] . "&cmd=delete' class='delete'><img src='img/delete.png' width='20px' height='20px'></a></td>";
+                    echo "<td> " . ($fila['activo'] == 1 ? 'Si' : 'No') . "</td>";
+                    echo "<td>" . $fila['creado'] . "</td>";
+                    echo "<td class='crud-buttons'><a href='index.php?id=" . $fila['id'] . "&cmd=update' class='update'><img src='img/update.png' width='20px' height='20px'>Editar</a>" .
+                        "<a href='index.php?id=" . $fila['id'] . "&cmd=delete' class='delete'><img src='img/delete.png' width='20px' height='20px'>Borrar</a></td>";
                     echo "</tr>";
                 }
                 ?>

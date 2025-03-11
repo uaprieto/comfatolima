@@ -63,7 +63,16 @@ if (isset($_POST['registro'])) {
     <title>Recaudos UP</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
-
+<script>
+    function confirmarEliminacion() {
+        var respuesta= confirm("¡ Ultima oportunidad ! - Confirme que desea eliminar?");
+        if(respuesta){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
 <body>
     <div class="container">
         <h2>Administrar clientes</h2>
@@ -101,8 +110,14 @@ if (isset($_POST['registro'])) {
                         echo "<td>" . $fila['nombre'] . "</td>";
                         echo "<td>" . $fila['apellido'] . "</td>";
                         echo "<td> " . $fila['ciudad'] . "</td>";
-                        echo "<td class='crud-buttons'><a href='form_cliente.php?id=" . $fila['documento'] . "&cmd=update' class='update'><img src='img/update.png' width='20px' height='20px'>Editar</a>" .
-                            "<a href='eliminar.php?id=" . $fila['documento'] . "&cmd=delete' class='delete'><img src='img/delete.png' width='20px' height='20px'>Borrar</a></td>";
+                        echo "<td class='crud-buttons'>
+                            <a href='form_cliente.php?id=" . $fila['documento'] . "&cmd=update' class='update'><img src='img/update.png' width='20px' height='20px'>Editar</a>
+                            <form action='eliminar.php' method='get' onsubmit='return confirmarEliminacion();'>
+                                <input type='hidden' name='documento' value='" . $fila['documento'] . "'>
+                                <input type='hidden' name='cmd' value='delete'>
+                                <button type='submit' class='delete'>Eliminar</button>
+                            </form>
+                            <a href='eliminar.php?id=" . $fila['documento'] . "&cmd=delete' class='delete'><img src='img/delete.png' width='20px' height='20px'>Borrar</a></td>";
                         echo "</tr>";
                     }
                     ?>

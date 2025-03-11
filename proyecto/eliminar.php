@@ -13,7 +13,7 @@ if (isset($_GET["id"]) && isset($_GET["cmd"]) && $_GET["cmd"] == "delete") {
     if ($resultado) {
         echo "Registro eliminado";
     }
-    header("Location: index.php");
+    header("Location: table_users.php");
 }
 ?>
 <!DOCTYPE html>
@@ -37,7 +37,7 @@ if (isset($_GET["id"]) && isset($_GET["cmd"]) && $_GET["cmd"] == "delete") {
         <input type="hidden" name="cmd" value="confirm_delete">
         <p>¿Está seguro de que desea eliminar a <?php echo $data_form['nombre'] . " " . $data_form["correo"]; ?></p>
         <button type="submit">Eliminar</button>
-        <a href="index.php">Cancelar</a>
+        <a href="table_users.php">Cancelar</a>
     </form>
 </body>
 

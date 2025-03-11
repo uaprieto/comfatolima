@@ -38,7 +38,7 @@ if (isset($_POST['registro'])) {
     $clave = $_POST['clave'];
     $activo = isset($_POST['activo']) ? 1 : 0;
     if ($id == "") {
-        $sql = "INSERT INTO usuarios (nombre, correo, clave, activo) VALUES ('$nombre', '$correo', '$clave', '$activo')";
+        $sql = "INSERT INTO usuarios (nombre, correo, clave, activo) VALUES ('$nombre', '$correo', '$clave', 1)";
     } else {
         $sql = "UPDATE usuarios SET nombre = '$nombre', correo = '$correo', clave = '$clave', activo = '$activo' WHERE id = '$id'";
     }
@@ -65,7 +65,6 @@ if (isset($_POST['registro'])) {
             <form action="" method="get">
                 <input type="text" name="search" placeholder="Buscar usuario...">
                 <input type="submit" class="form-buttons" name="btn" value="Buscar">
-                <input type="submit" class="form-buttons" name="btn" value="Todos">
                 <input type="button" class="form-buttons" value="Nuevo" onclick="window.location.href='form_user.php'">
             </form>
         </div>

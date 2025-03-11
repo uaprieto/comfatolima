@@ -52,21 +52,23 @@ form {
     max-width: 400px;
 }
 
-.container {
-    width: 80%;
-    margin: 30px auto;
-    overflow: hidden;
+.search-container form {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    flex-direction: row;
+    max-width: 800px;
 }
 
-.search-container {
-    width: 100%;
-    margin-top: 50px;
-    margin-bottom: 10px;
-}
 .table-container {
     margin-bottom: 20px;
 }
 
+.container {
+    width: 100%;
+    margin: 30px auto;
+    overflow: hidden;
+}
 label {
     margin-bottom: 5px;
 }
@@ -84,7 +86,6 @@ input[type="submit"] {
     padding: 10px;
     background-color: #4CAF50;
     color: white;
-    border: none;
     border-radius: 4px;
     cursor: pointer;
 }
@@ -113,23 +114,26 @@ th {
     color: #0d0d0d;
 }
 
-button {
-    background-color: #00ffcc;
-    border: none;
-    color: #0d0d0d;
-    padding: 10px 20px;
-    text-transform: uppercase;
-    cursor: pointer;
-}
+
 
 button:hover {
     background-color: #ff00ff;
 }
 
 .form-buttons {
-    display: flex;
-    gap: 5px;
-    
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    color: #0d0d0d;
+    display: block;
+    font-size: 14px;
+    background: #45a049;
+    margin-bottom: 15px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    outline: medium none;
+    cursor: pointer;
+    position:static;
 }
 
 .crud-buttons {

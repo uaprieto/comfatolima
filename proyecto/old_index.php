@@ -1,7 +1,7 @@
 <?php include 'conexion.php';
-if (isset($_GET['id']) && isset($_GET['cmd'])) {
-    $id = $_GET['id'];
-    $cmd = $_GET['cmd'];
+$id = $_GET['id'];
+$cmd = $_GET['cmd'];
+if (isset($id) && isset($cmd)) {
     switch ($cmd) {
         case 'delete':
             //Confirmar si desea eliminar
@@ -21,7 +21,6 @@ if (isset($_GET['id']) && isset($_GET['cmd'])) {
     }
 } else {
     $bnt_form = "Registrar";
-    $data_form = array('id' => '', 'nombre' => '', 'correo' => '', 'clave' => '', 'activo' => '');
 }
 if (isset($_POST['registro'])) {
     $id = $_POST['id'];
@@ -37,7 +36,7 @@ if (isset($_POST['registro'])) {
     print_r($sql);
     mysqli_query($conexion, $sql);
     print_r(mysqli_error($conexion));
-    header("Location: table_users.php");
+    header("Location: index.php");
 }
 
 ?>
@@ -54,7 +53,7 @@ if (isset($_POST['registro'])) {
 <body>
     <div class="form-container">
         <h2>Formulario de Usuario</h2>
-        <form action="table_users.php" name="usuario" method="post">
+        <form action="index.php" name="usuario" method="post">
             <input type="hidden" name="id" value="<?php echo $data_form['id']; ?>">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" required value="<?php echo $data_form['nombre']; ?>">
@@ -68,27 +67,52 @@ if (isset($_POST['registro'])) {
             <input type="password" id="clave" name="clave" required value="<?php echo $data_form['clave']; ?>">
             <br>
 
-            <div class="buttons">
-                <?php if ($bnt_form == "Actualizar") {
-                    echo '<label for="activo">Activo:</label>';
-                    echo '<input type="checkbox" id="activo" name="activo" value=';
-                    if ($data_form['activo'] == 1) {
-                        echo "checked";
-                    } else {
-                        echo "0";
-                    }
-                    echo '>';
-                }
-                ?>
-
-                <br>
-                <button class="button" type="submit" name="registro">
-                    <?php echo $bnt_form; ?></button>
-                <button class="button" type="button" onclick="window.location.href='table_users.php'">Cancelar</button>
-            </div>
+            <label for="activo">Activo:</label>
+            <input type="checkbox" id="activo" name="activo" value="1"
+                <?php if ($data_form['activo'] == 1) {
+                    echo "checked";
+                } ?>>
+            <br>
+            <button class="button" type="submit" name="registro">
+                <?php echo $bnt_form; ?></button>
         </form>
     </div>
 
+    <div class="table-container">
+        <h2>Tabla de Usuarios</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Activo</th>
+                    <th>Fecha creado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se agregarán las filas de usuarios dinámicamente -->
+                <?php
+                $sql = "SELECT * FROM usuarios";
+                $resultado = mysqli_query($conexion, $sql);
+
+                while ($fila = mysqli_fetch_array($resultado)) {
+                    //$usuario = Usuario::crearDesdeFila($fila);
+                    echo "<tr>";
+                    echo "<td>" . $fila['id'] . "</td>";
+                    echo "<td>" . $fila['nombre'] . "</td>";
+                    echo "<td>" . $fila['correo'] . "</td>";
+                    echo "<td> " . ($fila['activo'] == 1 ? 'Si' : 'No') . "</td>";
+                    echo "<td>" . $fila['creado'] . "</td>";
+                    echo "<td class='crud-buttons'><a href='index.php?id=" . $fila['id'] . "&cmd=update' class='update'><img src='img/update.png' width='20px' height='20px'>Editar</a>" .
+                        "<a href='eliminar.php?id=" . $fila['id'] . "&cmd=delete' class='delete'><img src='img/delete.png' width='20px' height='20px'>Borrar</a></td>";
+                    echo "</tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
 </body>
 
 </html>

@@ -1,13 +1,13 @@
 <?php include 'conexion.php';
-if (isset($_GET['documento']) && isset($_GET['cmd'])) {
-    $documento = $_GET['documento'];
+if (isset($_GET['id']) && isset($_GET['cmd'])) {
+    $documento = $_GET['id'];
     $cmd = $_GET['cmd'];
     switch ($cmd) {
         case 'update':
             $sql = "SELECT c.documento, c.nombre, c.apellido, c.ciudad_id, cd.nombre as ciudad
-                FROM clientes c JOIN ciudades cd ON c.ciudad_id = cd.id
+                FROM clientes as c JOIN ciudades as cd ON c.ciudad_id = cd.id
                 WHERE c.documento = '$documento'";
-            
+
             $resultado = mysqli_query($conexion, $sql);
             $data_form = mysqli_fetch_array($resultado);
             $data_form['cmd'] = 'update';
@@ -16,7 +16,7 @@ if (isset($_GET['documento']) && isset($_GET['cmd'])) {
     }
 } else {
     $bnt_form = "Registrar";
-    $data_form = array('documento' => '', 'nombre' => '', 'apellido' => '', 'ciudad_id'=>'','ciudad' => '', 'cmd' => 'new');
+    $data_form = array('documento' => '', 'nombre' => '', 'apellido' => '', 'ciudad_id' => '', 'ciudad' => '', 'cmd' => 'new');
 }
 
 ?>
@@ -33,7 +33,7 @@ if (isset($_GET['documento']) && isset($_GET['cmd'])) {
 <body>
     <div class="form-container">
         <h2>Formulario de Usuario</h2>
-        <form action="table_clientes.php" name="usuario" method="post">
+        <form action="table_clientes.php" name="cliente" method="post">
             <input type="hidden" name="cmd" value="<?php echo $data_form['cmd']; ?>">
             <label for="documento">Documento:</label>
             <input type="text" id="documento" name="documento" required value="<?php echo $data_form['documento']; ?>">
@@ -43,9 +43,6 @@ if (isset($_GET['documento']) && isset($_GET['cmd'])) {
             <br>
             <label for="apellido">Apellido:</label>
             <input type="text" id="apellido" name="apellido" required value="<?php echo $data_form['apellido']; ?>">
-            <br>
-            <label for="ciudad_id">ciudad_id:</label>
-            <input type="number" id="ciudad_id" name="ciudad_id" required value="<?php echo $data_form['ciudad_id']; ?>">
             <br>
             <label for="ciudad">Ciudad:</label>
             <select name="ciudad" id="ciudad">

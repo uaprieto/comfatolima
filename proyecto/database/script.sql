@@ -29,36 +29,41 @@ CREATE TABLE clientes (
     `documento` int(11) NOT NULL,
     `nombre` varchar(32) NOT NULL,
     `apellido` varchar(64) NOT NULL,
-    `ciudad_id` int(10) NOT NULL,
+    `ciudad_id` int(5) NOT NULL,
     `creado` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `activo` tinyint(1) NOT NULL DEFAULT '1'
 
 );
--- Indices de la tabla `clientes`
+
 --
-ALTER TABLE `clientes`
-  ADD PRIMARY KEY (`documento`);
-
--- Crear tabla de Ciudades
-DROP TABLE IF EXISTS ciudades;
-
-CREATE TABLE ciudades (
-    `id` int(10) NOT NULL,
-    `nombre` varchar(32) NOT NULL,
-    `dto_id` int(2) NOT NULL
-);
--- Indices de la tabla `ciudades`
+-- Crear tabla de Departamentos
 --
-ALTER TABLE `ciudades`
-  ADD PRIMARY KEY (`id`);
-
---Crear tabla de Departamentos
 DROP TABLE IF EXISTS departamentos;
 
 CREATE TABLE departamentos (
     `id` int(2) NOT NULL,
     `nombre` varchar(32) NOT NULL
 );
+-- Crear tabla de Ciudades
+DROP TABLE IF EXISTS ciudades;
+
+CREATE TABLE ciudades (
+    `id` int(5) NOT NULL,
+    `nombre` varchar(32) NOT NULL,
+    `dto_id` int(2) NOT NULL
+);
+
+-- Indices de la tabla `clientes`
+--
+ALTER TABLE `clientes`
+  ADD PRIMARY KEY (`documento`);
+
+-- Indices de la tabla `ciudades`
+--
+ALTER TABLE `ciudades`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `departamentos`
 --
 ALTER TABLE `departamentos`
@@ -139,5 +144,5 @@ INSERT INTO ciudades (id, nombre, dto_id) VALUES
 (29, 'Ibagué', 29),
 (30, 'Cali', 30),
 (31, 'Mitú', 31),
-(32, 'Puerto Carreño', 32)
+(32, 'Puerto Carreño', 32),
 (33, 'Rioblanco', 29);

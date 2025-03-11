@@ -5,7 +5,7 @@ if (isset($_GET["documento"]) && isset($_GET['cmd'])) {
     switch ($cmd) {
         case 'delete':
             //Confirmar si desea eliminar
-            $sql = "DELETE FROM usuarios WHERE documento = '$documento'";
+            $sql = "DELETE FROM clientes WHERE documento = '$documento'";
             $resultado = mysqli_query($conexion, $sql);
             if ($resultado) {
                 echo "Registro eliminado";
@@ -16,7 +16,7 @@ if (isset($_GET["documento"]) && isset($_GET['cmd'])) {
             $sql = "SELECT c.documento, c.nombre, c.apellido, c.ciudad_id, cd.nombre as ciudad
                 FROM clientes c JOIN ciudades cd ON c.ciudad_id = cd.id
                 WHERE c.documento = '$documento'";
-            
+
             $resultado = mysqli_query($conexion, $sql);
             $data_form = mysqli_fetch_array($resultado);
             $bnt_form = "Actualizar";
@@ -26,24 +26,27 @@ if (isset($_GET["documento"]) && isset($_GET['cmd'])) {
     $search = $_GET['search'];
     $btn = $_GET['btn'];
     if ($btn == "Buscar") {
-        $sql = "SELECT * FROM usuarios WHERE nombre LIKE '%$search%' OR Apellido LIKE '%$search%'";
+        $sql = "SELECT c.documento, c.nombre, c.apellido, c.ciudad_id, cd.nombre as ciudad
+                FROM clientes c JOIN ciudades cd ON c.ciudad_id = cd.id WHERE nombre LIKE '%$search%' OR Apellido LIKE '%$search%'";
     } else {
-        $sql = "SELECT * FROM usuarios";
+        $sql = "SELECT c.documento, c.nombre, c.apellido, c.ciudad_id, cd.nombre as ciudad
+                FROM clientes c JOIN ciudades cd ON c.ciudad_id = cd.id";
     }
     $resultado = mysqli_query($conexion, $sql);
 } else {
     $bnt_form = "Registrar";
 }
 if (isset($_POST['registro'])) {
+    print_r($_POST);
     $cmd = $_POST['cmd'];
-    $documento = $_POST['documento'];
+    $documento = (int) $_POST['documento'];
     $nombre = $_POST['nombre'];
     $apellido = $_POST['apellido'];
-    $ciudad_id = $_POST['ciudad_id'];
+    $ciudad_id = (int) $_POST['ciudad'];
     if ($cmd == "new") {
-        $sql = "INSERT INTO usuarios (documento, nombre, apellido, ciudad_id) VALUES ('$documento','$nombre', '$apellido', '$ciudad_id')";
+        $sql = "INSERT INTO clientes (documento, nombre, apellido, ciudad_id) VALUES ('$documento','$nombre', '$apellido', '$ciudad_id')";
     } else {
-        $sql = "UPDATE usuarios SET documento=$documento, nombre = '$nombre', apellido = '$apellido', ciudad_id = '$ciudad_id' WHERE id = '$id'";
+        $sql = "UPDATE clientes SET nombre = '$nombre', apellido = '$apellido', ciudad_id = '$ciudad_id' WHERE documento='$documento'";
     }
     mysqli_query($conexion, $sql);
     print_r(mysqli_error($conexion));
@@ -63,7 +66,7 @@ if (isset($_POST['registro'])) {
 
 <body>
     <div class="container">
-        <h2>Administrar Usuarios</h2>
+        <h2>Administrar clientes</h2>
         <div class="search-container">
             <form action="" method="get">
                 <input type="text" name="search" placeholder="Buscar cliente...">
@@ -72,7 +75,7 @@ if (isset($_POST['registro'])) {
             </form>
         </div>
         <div class="table-container">
-            <h2>Tabla de Usuarios</h2>
+            <h2>Tabla de clientes</h2>
             <table>
                 <thead>
                     <tr>
@@ -84,10 +87,11 @@ if (isset($_POST['registro'])) {
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Las filas de usuarios dinámicamente -->
+                    <!-- Las filas de clientes dinámicamente -->
                     <?php
                     if (!isset($resultado)) {
-                        $sql = "SELECT * FROM usuarios";
+                        $sql = "SELECT c.documento, c.nombre, c.apellido, c.ciudad_id, cd.nombre as ciudad
+                         FROM clientes as c JOIN ciudades as cd ON c.ciudad_id = cd.id";
                         $resultado = mysqli_query($conexion, $sql);
                     }
                     while ($fila = mysqli_fetch_array($resultado)) {

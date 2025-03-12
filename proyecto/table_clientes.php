@@ -10,7 +10,7 @@ if (isset($_GET["documento"]) && isset($_GET['cmd'])) {
             if ($resultado) {
                 echo "Registro eliminado";
             }
-            header("Location: index.php");
+            header("Location: table_clientes.php");
             break;
         case 'update':
             $sql = "SELECT c.documento, c.nombre, c.apellido, c.ciudad_id, cd.nombre as ciudad
@@ -65,14 +65,15 @@ if (isset($_POST['registro'])) {
 </head>
 <script>
     function confirmarEliminacion() {
-        var respuesta= confirm("¡ Ultima oportunidad ! - Confirme que desea eliminar?");
-        if(respuesta){
+        var respuesta = confirm("¡ Ultima oportunidad ! - Confirme que desea eliminar?");
+        if (respuesta) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 </script>
+
 <body>
     <div class="container">
         <h2>Administrar clientes</h2>
@@ -112,11 +113,11 @@ if (isset($_POST['registro'])) {
                         echo "<td> " . $fila['ciudad'] . "</td>";
                         echo "<td class='crud-buttons'>
                             <a href='form_cliente.php?id=" . $fila['documento'] . "&cmd=update' class='update'><img src='img/update.png' width='20px' height='20px'>Editar</a>
-                            <form action='eliminar.php' method='get' onsubmit='return confirmarEliminacion();'>
+                            <form class='delete' action='table_clientes.php' method='get' onsubmit='return confirmarEliminacion();'>
                                 <input type='hidden' name='documento' value='" . $fila['documento'] . "'>
                                 <input type='hidden' name='cmd' value='delete'>
-                                <button type='submit' class='delete'>Eliminar</button>
-                            </form>
+                                <button type='submit' class='delete'>Borrar</button>
+                            </form> 
                             <a href='eliminar.php?id=" . $fila['documento'] . "&cmd=delete' class='delete'><img src='img/delete.png' width='20px' height='20px'>Borrar</a></td>";
                         echo "</tr>";
                     }

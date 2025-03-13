@@ -111,7 +111,7 @@ if (isset($_POST['registro'])) {
                                 <input type='hidden' name='cmd' value='delete'>
                                 <button type='submit' class='delete'>Borrar</button>
                             </form> 
-                            <a href='?id=" . $fila['documento'] . "&cmd=delete' class='delete'><img src='img/delete.png' width='20px' height='20px'>Borrar</a></td>";
+                            <a href='table_cliente.php?id=" . $fila['documento'] . "&cmd=delete' class='delete'><img src='img/delete.png' width='20px' height='20px'>Borrar</a></td>";
                         echo "</tr>";
                     }
                     ?>

@@ -4,8 +4,10 @@ if (isset($_GET['id']) && isset($_GET['cmd'])) {
     $cmd = $_GET['cmd'];
     switch ($cmd) {
         case 'update':
-            $sql = "SELECT c.documento, c.nombre, c.apellido, c.ciudad_id, cd.nombre as ciudad
-                FROM clientes as c JOIN ciudades as cd ON c.ciudad_id = cd.id
+            $sql = "SELECT c.documento, c.nombre, c.apellido, c.ciudad_id, cd.nombre as ciudad, cd.dto_id as dto_id, d.nombre as dto
+                FROM clientes as c 
+                JOIN ciudades as cd ON c.ciudad_id = cd.id
+                JOIN departamentos as d ON cd.dto_id = d.id
                 WHERE c.documento = '$documento'";
 
             $resultado = mysqli_query($conexion, $sql);
@@ -16,7 +18,7 @@ if (isset($_GET['id']) && isset($_GET['cmd'])) {
     }
 } else {
     $bnt_form = "Registrar";
-    $data_form = array('documento' => '', 'nombre' => '', 'apellido' => '', 'ciudad_id' => '', 'ciudad' => '', 'cmd' => 'new');
+    $data_form = array('documento' => '', 'nombre' => '', 'apellido' => '', 'ciudad_id' => '', 'ciudad' => '',  'dto_id' => '', 'dto' => '','cmd' => 'new');
 }
 
 ?>
@@ -44,6 +46,17 @@ if (isset($_GET['id']) && isset($_GET['cmd'])) {
             <label for="apellido">Apellido:</label>
             <input type="text" id="apellido" name="apellido" required value="<?php echo $data_form['apellido']; ?>">
             <br>
+            <label for="dto">Departamento:</label>
+            <select name="dto" id="dto">
+                <option value="<?php echo $data_form['dto_id']; ?>"><?php echo $data_form['dto']; ?></option>
+                <?php
+                $sql = "SELECT * FROM departamentos";
+                $resultado = mysqli_query($conexion, $sql);
+                while ($data = mysqli_fetch_array($resultado)) {
+                    echo '<option value="' . $data['id'] . '">' . $data['nombre'] . '</option>';
+                }
+                ?>
+            </select>
             <label for="ciudad">Ciudad:</label>
             <select name="ciudad" id="ciudad">
                 <option value="<?php echo $data_form['ciudad_id']; ?>"><?php echo $data_form['ciudad']; ?></option>
@@ -57,19 +70,6 @@ if (isset($_GET['id']) && isset($_GET['cmd'])) {
             </select>
             <br>
             <div class="buttons">
-                <?php if ($bnt_form == "Actualizar") {
-                    echo '<label for="activo">Activo:</label>';
-                    echo '<input type="checkbox" id="activo" name="activo" value=';
-                    if ($data_form['activo'] == 1) {
-                        echo "checked";
-                    } else {
-                        echo "0";
-                    }
-                    echo '>';
-                }
-                ?>
-
-                <br>
                 <button class="button" type="submit" name="registro">
                     <?php echo $bnt_form; ?></button>
                 <button class="button" type="button" onclick="window.location.href='table_clientes.php'">Cancelar</button>

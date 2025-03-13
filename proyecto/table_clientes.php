@@ -2,37 +2,28 @@
 if (isset($_GET["documento"]) && isset($_GET['cmd'])) {
     $documento = $_GET['documento'];
     $cmd = $_GET['cmd'];
-    switch ($cmd) {
-        case 'delete':
-            //Confirmar si desea eliminar
-            $sql = "DELETE FROM clientes WHERE documento = '$documento'";
-            $resultado = mysqli_query($conexion, $sql);
-            if ($resultado) {
-                echo "Registro eliminado";
-            }
-            header("Location: table_clientes.php");
-            break;
-        case 'update':
-            $sql = "SELECT c.documento, c.nombre, c.apellido, c.ciudad_id, cd.nombre as ciudad
-                FROM clientes c JOIN ciudades cd ON c.ciudad_id = cd.id
-                WHERE c.documento = '$documento'";
-
-            $resultado = mysqli_query($conexion, $sql);
-            $data_form = mysqli_fetch_array($resultado);
-            $bnt_form = "Actualizar";
-            break;
+    if ($cmd == 'delete') {
+        //ya debio estar Confirmado si eliminar
+        $sql = "DELETE FROM clientes WHERE documento = '$documento'";
+        $resultado = mysqli_query($conexion, $sql);
+        if ($resultado) {
+            echo "Registro eliminado";
+        }
+        header("Location: table_clientes.php");
+            
     }
 } elseif (isset($_GET["search"]) && isset($_GET['btn'])) {
     $search = $_GET['search'];
     $btn = $_GET['btn'];
     if ($btn == "Buscar") {
-        $sql = "SELECT c.documento, c.nombre, c.apellido, c.ciudad_id, cd.nombre as ciudad
-                FROM clientes c JOIN ciudades cd ON c.ciudad_id = cd.id WHERE nombre LIKE '%$search%' OR Apellido LIKE '%$search%'";
-    } else {
-        $sql = "SELECT c.documento, c.nombre, c.apellido, c.ciudad_id, cd.nombre as ciudad
-                FROM clientes c JOIN ciudades cd ON c.ciudad_id = cd.id";
+        $sql = "SELECT c.documento, c.nombre, c.apellido, cd.nombre as ciudad, d.nombre as dto
+                FROM clientes as c 
+                JOIN ciudades as cd ON c.ciudad_id = cd.id
+                JOIN departamentos as d ON cd.dto_id = d.id
+                WHERE c.nombre LIKE '%$search%' OR c.apellido LIKE '%$search%'";
+    
+        $resultado = mysqli_query($conexion, $sql);
     }
-    $resultado = mysqli_query($conexion, $sql);
 } else {
     $bnt_form = "Registrar";
 }
@@ -92,7 +83,7 @@ if (isset($_POST['registro'])) {
                         <th>Documento</th>
                         <th>Nombre</th>
                         <th>Apellido</th>
-                        <th>Ciudad</th>
+                        <th>Ciudad Departamento</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -100,8 +91,10 @@ if (isset($_POST['registro'])) {
                     <!-- Las filas de clientes dinámicamente -->
                     <?php
                     if (!isset($resultado)) {
-                        $sql = "SELECT c.documento, c.nombre, c.apellido, c.ciudad_id, cd.nombre as ciudad
-                         FROM clientes as c JOIN ciudades as cd ON c.ciudad_id = cd.id";
+                        $sql = "SELECT c.documento, c.nombre, c.apellido, cd.nombre as ciudad, d.nombre as dto
+                                FROM clientes as c 
+                                JOIN ciudades as cd ON c.ciudad_id = cd.id
+                                JOIN departamentos as d ON cd.dto_id = d.id";
                         $resultado = mysqli_query($conexion, $sql);
                     }
                     while ($fila = mysqli_fetch_array($resultado)) {
@@ -110,7 +103,7 @@ if (isset($_POST['registro'])) {
                         echo "<td>" . $fila['documento'] . "</td>";
                         echo "<td>" . $fila['nombre'] . "</td>";
                         echo "<td>" . $fila['apellido'] . "</td>";
-                        echo "<td> " . $fila['ciudad'] . "</td>";
+                        echo "<td> " . $fila['ciudad'] .' '. $fila['dto'] . "</td>";
                         echo "<td class='crud-buttons'>
                             <a href='form_cliente.php?id=" . $fila['documento'] . "&cmd=update' class='update'><img src='img/update.png' width='20px' height='20px'>Editar</a>
                             <form class='delete' action='table_clientes.php' method='get' onsubmit='return confirmarEliminacion();'>
@@ -118,7 +111,7 @@ if (isset($_POST['registro'])) {
                                 <input type='hidden' name='cmd' value='delete'>
                                 <button type='submit' class='delete'>Borrar</button>
                             </form> 
-                            <a href='eliminar.php?id=" . $fila['documento'] . "&cmd=delete' class='delete'><img src='img/delete.png' width='20px' height='20px'>Borrar</a></td>";
+                            <a href='?id=" . $fila['documento'] . "&cmd=delete' class='delete'><img src='img/delete.png' width='20px' height='20px'>Borrar</a></td>";
                         echo "</tr>";
                     }
                     ?>

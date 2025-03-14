@@ -114,7 +114,14 @@ th {
     color: #0d0d0d;
 }
 
+.genero {
+    display: flex;
+    gap: 10px;
+}
 
+input[type="radio"] {
+    margin-right: 10px;
+}
 
 button:hover {
     background-color: #ff00ff;

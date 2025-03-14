@@ -1,43 +1,43 @@
 <?php include 'conexion.php';
-if (isset($_GET["documento"]) && isset($_GET['cmd'])) {
-    $documento = $_GET['documento'];
+if (isset($_GET["identifica"]) && isset($_GET['cmd'])) {
+    $identifica = $_GET['identifica'];
     $cmd = $_GET['cmd'];
     if ($cmd == 'delete') {
         //ya debio estar Confirmado si eliminar
-        $sql = "DELETE FROM clientes WHERE documento = '$documento'";
+        $sql = "DELETE FROM clientes WHERE identifica = '$identifica'";
         $resultado = mysqli_query($conexion, $sql);
         if ($resultado) {
             echo "Registro eliminado";
         }
         header("Location: table_clientes.php");
-            
     }
 } elseif (isset($_GET["search"]) && isset($_GET['btn'])) {
     $search = $_GET['search'];
     $btn = $_GET['btn'];
     if ($btn == "Buscar") {
-        $sql = "SELECT c.documento, c.nombre, c.apellido, cd.nombre as ciudad, d.nombre as dto
+        $sql = "SELECT c.identifica, c.nombre, c.apellido, cd.nombre as ciudad, d.nombre as dto,c.genero
                 FROM clientes as c 
                 JOIN ciudades as cd ON c.ciudad_id = cd.id
                 JOIN departamentos as d ON cd.dto_id = d.id
                 WHERE c.nombre LIKE '%$search%' OR c.apellido LIKE '%$search%'";
-    
+
         $resultado = mysqli_query($conexion, $sql);
     }
 } else {
     $bnt_form = "Registrar";
 }
 if (isset($_POST['registro'])) {
-    print_r($_POST);
+    // print_r($_POST);
     $cmd = $_POST['cmd'];
-    $documento = (int) $_POST['documento'];
+    $identifica = (int) $_POST['identifica'];
     $nombre = $_POST['nombre'];
     $apellido = $_POST['apellido'];
     $ciudad_id = (int) $_POST['ciudad'];
+    $genero = $_POST['genero'];
     if ($cmd == "new") {
-        $sql = "INSERT INTO clientes (documento, nombre, apellido, ciudad_id) VALUES ('$documento','$nombre', '$apellido', '$ciudad_id')";
+        $sql = "INSERT INTO clientes (identifica, nombre, apellido, ciudad_id, genero) VALUES ('$identifica','$nombre', '$apellido', '$ciudad_id', '$genero')";
     } else {
-        $sql = "UPDATE clientes SET nombre = '$nombre', apellido = '$apellido', ciudad_id = '$ciudad_id' WHERE documento='$documento'";
+        $sql = "UPDATE clientes SET nombre = '$nombre', apellido = '$apellido', ciudad_id = '$ciudad_id', genero='$genero' WHERE identifica='$identifica'";
     }
     mysqli_query($conexion, $sql);
     print_r(mysqli_error($conexion));
@@ -80,7 +80,8 @@ if (isset($_POST['registro'])) {
             <table>
                 <thead>
                     <tr>
-                        <th>Documento</th>
+                        <th>Genero</th>
+                        <th>Identidad</th>
                         <th>Nombre</th>
                         <th>Apellido</th>
                         <th>Ciudad Departamento</th>
@@ -91,27 +92,33 @@ if (isset($_POST['registro'])) {
                     <!-- Las filas de clientes dinámicamente -->
                     <?php
                     if (!isset($resultado)) {
-                        $sql = "SELECT c.documento, c.nombre, c.apellido, cd.nombre as ciudad, d.nombre as dto
+                        $sql = "SELECT c.identifica, c.nombre, c.apellido, cd.nombre as ciudad, d.nombre as dto,c.genero
                                 FROM clientes as c 
                                 JOIN ciudades as cd ON c.ciudad_id = cd.id
-                                JOIN departamentos as d ON cd.dto_id = d.id";
+                                JOIN departamentos as d ON cd.dto_id = d.id
+                                ORDER BY c.creado DESC";
                         $resultado = mysqli_query($conexion, $sql);
                     }
                     while ($fila = mysqli_fetch_array($resultado)) {
                         //$usuario = Usuario::crearDesdeFila($fila);
                         echo "<tr>";
-                        echo "<td>" . $fila['documento'] . "</td>";
+                        echo "<td><img src='img/" . ($fila['genero'] == 0 ? 'fe' : '') . "male.png' width='40px' height='40px'></td>";
+                        echo "<td>" . $fila['identifica'] . "</td>";
                         echo "<td>" . $fila['nombre'] . "</td>";
                         echo "<td>" . $fila['apellido'] . "</td>";
-                        echo "<td> " . $fila['ciudad'] .' '. $fila['dto'] . "</td>";
+                        echo "<td> " . $fila['ciudad'] . ' ' . $fila['dto'] . "</td>";
                         echo "<td class='crud-buttons'>
-                            <a href='form_cliente.php?id=" . $fila['documento'] . "&cmd=update' class='update'><img src='img/update.png' width='20px' height='20px'>Editar</a>
-                            <form class='delete' action='table_clientes.php' method='get' onsubmit='return confirmarEliminacion();'>
-                                <input type='hidden' name='documento' value='" . $fila['documento'] . "'>
+                            <form action='form_cliente.php' method='get'>
+                                <input type='hidden' name='identifica' value='" . $fila['identifica'] . "'>
+                                <input type='hidden' name='cmd' value='update'>
+                                <button type='submit' class='update'>Editar</button>
+                            </form>
+                            <form class='delete' action='table_clientes.php' method='get' 
+                                onsubmit='return confirmarEliminacion();'>
+                                <input type='hidden' name='identifica' value='" . $fila['identifica'] . "'>
                                 <input type='hidden' name='cmd' value='delete'>
                                 <button type='submit' class='delete'>Borrar</button>
-                            </form> 
-                            <a href='table_cliente.php?id=" . $fila['documento'] . "&cmd=delete' class='delete'><img src='img/delete.png' width='20px' height='20px'>Borrar</a></td>";
+                            </form>                    </td>";
                         echo "</tr>";
                     }
                     ?>

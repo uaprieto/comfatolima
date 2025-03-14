@@ -26,12 +26,12 @@ COMMIT;
 DROP TABLE IF EXISTS clientes;
 
 CREATE TABLE clientes (
-    `documento` int(11) NOT NULL,
+    `identifica` int(11) NOT NULL,
     `nombre` varchar(32) NOT NULL,
     `apellido` varchar(64) NOT NULL,
     `ciudad_id` int(5) NOT NULL,
     `creado` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `activo` tinyint(1) NOT NULL DEFAULT '1'
+    `genero` tinyint(1) NOT NULL DEFAULT '1'
 
 );
 
@@ -56,7 +56,7 @@ CREATE TABLE ciudades (
 -- Indices de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  ADD PRIMARY KEY (`documento`);
+  ADD PRIMARY KEY (`identifica`);
 
 -- Indices de la tabla `ciudades`
 --

@@ -52,7 +52,8 @@ if (isset($_POST['registro'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recaudos UP</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <!-- <link rel="stylesheet" href="css/styles.css"> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <script>
     function confirmarEliminacion() {
@@ -68,24 +69,24 @@ if (isset($_POST['registro'])) {
 <body>
     <div class="container">
         <h2>Administrar clientes</h2>
-        <div class="search-container">
+        <div class="col-6">
             <form action="" method="get">
                 <input type="text" name="search" placeholder="Buscar cliente...">
-                <input type="submit" class="form-buttons" name="btn" value="Buscar">
-                <input type="button" class="form-buttons" value="Nuevo" onclick="window.location.href='form_cliente.php'">
+                <input type="submit" class="btn btn-primary" name="btn" value="Buscar">
+                <input type="button" class="btn btn-primary" value="Nuevo" onclick="window.location.href='form_cliente.php'">
             </form>
         </div>
-        <div class="table-container">
-            <h2>Tabla de clientes</h2>
-            <table>
-                <thead>
+        <div class="col-12">
+            <table class="table table-striped">
+                <caption>Lista de clientes</caption>
+                <thead class="bg-info">
                     <tr>
-                        <th>Genero</th>
-                        <th>Identidad</th>
-                        <th>Nombre</th>
-                        <th>Apellido</th>
-                        <th>Ciudad Departamento</th>
-                        <th>Acciones</th>
+                        <th scope="col">Genero</th>
+                        <th scope="col">Identidad</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Apellido</th>
+                        <th scope="col">Ciudad y departamento</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -107,17 +108,17 @@ if (isset($_POST['registro'])) {
                         echo "<td>" . $fila['nombre'] . "</td>";
                         echo "<td>" . $fila['apellido'] . "</td>";
                         echo "<td> " . $fila['ciudad'] . ' ' . $fila['dto'] . "</td>";
-                        echo "<td class='crud-buttons'>
+                        echo "<td class='d-flex'>
                             <form action='form_cliente.php' method='get'>
                                 <input type='hidden' name='identifica' value='" . $fila['identifica'] . "'>
                                 <input type='hidden' name='cmd' value='update'>
-                                <button type='submit' class='update'>Editar</button>
+                                <button type='submit' class='btn btn-small btn-warning'>Editar</button>
                             </form>
-                            <form class='delete' action='table_clientes.php' method='get' 
+                            <form action='table_clientes.php' method='get' 
                                 onsubmit='return confirmarEliminacion();'>
                                 <input type='hidden' name='identifica' value='" . $fila['identifica'] . "'>
                                 <input type='hidden' name='cmd' value='delete'>
-                                <button type='submit' class='delete'>Borrar</button>
+                                <button type='submit' class='btn btn-small btn-danger'>Borrar</button>
                             </form>                    </td>";
                         echo "</tr>";
                     }
@@ -126,6 +127,7 @@ if (isset($_POST['registro'])) {
             </table>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 
 </html>

@@ -72,8 +72,8 @@ if (isset($_POST['registro'])) {
         <div class="col-6">
             <form action="" method="get">
                 <input type="text" name="search" placeholder="Buscar cliente...">
-                <input type="submit" class="btn btn-primary" name="btn" value="Buscar">
-                <input type="button" class="btn btn-primary" value="Nuevo" onclick="window.location.href='form_cliente.php'">
+                <input type="submit" class="btn btn-outline-primary" name="btn" value="Buscar">
+                <input type="button" class="btn btn-outline-secondary" value="Nuevo" onclick="window.location.href='form_cliente.php'">
             </form>
         </div>
         <div class="col-12">
